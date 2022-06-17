@@ -1,0 +1,53 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="card shadow">
+      <div class="card-header border-0">
+        <h3 class="mb-0">Buscador genérico</h3>
+      </div>
+      <div class="p-4">
+        <app-select-search
+          [endpoint]="'/users'"
+          [search_key]="'name'"
+          [view_key]="'name'"
+          [label]="'Selecciona un elemento'"
+          [not_found_placeholder]="'No se encontraron datos'"
+          [placeholder_searcher]="'Escribe para empezar a buscar'"
+          [(ngModel)]="selected_id"
+        ></app-select-search>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Tabla genérico</h3>
+        </div>
+
+        <div class="table-responsive">
+          <app-record-viewer
+            [data]="data"
+            (onActionClick)="onActionClick($event)"
+            [isLoading]="isLoading"
+            [headers]="headers"
+            [actions]="actions"
+          ></app-record-viewer>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end py-4">
+          <ngb-pagination
+            [pageSize]="pageSize"
+            [collectionSize]="total"
+            [(page)]="page"
+            [maxSize]="5"
+            [boundaryLinks]="true"
+            (pageChange)="change()"
+          ></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

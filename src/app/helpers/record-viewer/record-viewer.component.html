@@ -1,0 +1,59 @@
+<div class="recordViewer">
+  <table class="table">
+    <thead>
+      <tr class="thead-light">
+        <th *ngFor="let item of headers">{{ item.title }}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="!isLoading">
+        <tr *ngFor="let item of data">
+          <ng-container *ngFor="let head of headers">
+            <th>{{ validate(head, item) }}</th>
+          </ng-container>
+          <th>
+            <div class="d-flex">
+              <a
+                placement="top"
+                [ngbTooltip]="action.tooltip"
+                class="m-1"
+                [class]="action.color ? action.color : 'default'"
+                (click)="
+                  onActionClick.emit({ action: action.key, id: item.id })
+                "
+                *ngFor="let action of actions"
+                href="javascript:void(0)"
+              >
+                <i [class]="action.icon"></i>
+              </a>
+            </div>
+          </th></tr
+      ></ng-container>
+
+      <ng-container *ngIf="isLoading">
+        <tr *ngFor="let number of [0, 1, 2]">
+          <ng-container *ngFor="let head of headers">
+            <th>
+              <ngx-skeleton-loader
+                [theme]="{
+                  height: '25px',
+                  'margin-bottom': '-10px',
+                  'margin-top': '-15px'
+                }"
+              ></ngx-skeleton-loader>
+            </th>
+          </ng-container>
+          <th>
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '25px',
+                'margin-bottom': '-10px',
+                'margin-top': '-15px'
+              }"
+            ></ngx-skeleton-loader>
+          </th></tr
+      ></ng-container>
+    </tbody>
+  </table>
+</div>

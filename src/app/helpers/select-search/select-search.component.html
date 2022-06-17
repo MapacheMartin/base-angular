@@ -1,0 +1,26 @@
+<mat-form-field appearance="fill" style="width: 100%">
+  <mat-label *ngIf="view_label">{{ label }}</mat-label>
+  <mat-select
+    id="cliente_select"
+    (ngModelChange)="onChange($event)"
+    [formControl]="_control?.control"
+    [(ngModel)]="value"
+    [disabled]="isDisabled"
+    [placeholder]="placeholder"
+  >
+    <mat-option>
+      <ngx-mat-select-search
+        [formControl]="clienteServerSideFilteringCtrl"
+        [placeholderLabel]="placeholder_searcher"
+        [noEntriesFoundLabel]="not_found_placeholder"
+        [searching]="searching"
+      ></ngx-mat-select-search>
+    </mat-option>
+    <mat-option
+      *ngFor="let item of filteredServerSideClientes | async"
+      [value]="item.id"
+    >
+      {{ item[view_key] }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

@@ -1,0 +1,35 @@
+.recordViewer {
+  .default {
+    i {
+      color: #4285f4;
+    }
+  }
+
+  .danger {
+    i {
+      color: #ff4444;
+    }
+  }
+
+  .success {
+    i {
+      color: #00c851;
+    }
+  }
+
+  .info {
+    i {
+      color: #33b5e5;
+    }
+  }
+
+  .warning {
+    i {
+      color: #ffbb33;
+    }
+  }
+
+  i {
+    font-size: 16px;
+  }
+}
