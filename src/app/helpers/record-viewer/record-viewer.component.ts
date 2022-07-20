@@ -10,6 +10,7 @@ export class RecordViewerComponent implements OnInit {
   @Input() headers: any[] = [];
   @Input() data: any[] = [];
   @Input() actions: any[] = [];
+  @Input() actionsTitle: string = "ACCIONES";
   @Input() isLoading: boolean;
   @Output() onActionClick = new EventEmitter();
   constructor() {}

@@ -28,6 +28,7 @@ import {
   takeUntil,
   tap,
 } from "rxjs";
+import { selectSearchService } from "src/app/services/search-select.service";
 import { environment } from "src/environments/environment";
 
 @Component({
@@ -70,6 +71,7 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private http: HttpClient,
+    private _search: selectSearchService,
     @Inject(Injector) private injector: Injector
   ) {}
 
@@ -83,20 +85,25 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
     }, 100);
     this.clienteServerSideFilteringCtrl.valueChanges
       .pipe(
-        filter((search) => !!search),
+        filter((search) => {
+          // return !!search;
+          return true;
+        }),
         tap(() => (this.searching = true)),
         takeUntil(this._onDestroy),
         debounceTime(200),
         switchMap((search) => {
-          return this.http
-            .get<any>(
-              `${environment.api}${this.endpoint}?page=${1}&limit=${
-                this.page_size
-              }&${this.search_key}=${search}`
+          return this._search
+            .getSearch(
+              this.endpoint,
+              this.page_size,
+              search,
+              this.value,
+              this.search_key
             )
             .pipe(
               map((data) => {
-                return data;
+                return data.data;
               })
             );
         }),
@@ -113,6 +120,10 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
           this.searching = false;
         }
       );
+  }
+
+  clear() {
+    console.log("cleared");
   }
 
   onChange = (val) => {};
@@ -138,15 +149,11 @@ export class SelectSearchComponent implements OnInit, ControlValueAccessor {
 
   getFirstTime() {
     this.sub.unsubscribe();
-    this.sub = this.http
-      .get<any>(
-        `${environment.api}${this.endpoint}?page=${1}&limit=${this.page_size}${
-          this.value ? "&id=" + this.value : ""
-        }`
-      )
+    this.sub = this._search
+      .getSearch(this.endpoint, this.page_size, null, this.value)
       .subscribe({
         next: (e) => {
-          this.filteredServerSideClientes.next(e);
+          this.filteredServerSideClientes.next(e.data);
           this.changeDetectorRef.detectChanges();
         },
       });

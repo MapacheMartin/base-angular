@@ -1,26 +1,38 @@
 <div class="recordViewer">
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr class="thead-light">
         <th *ngFor="let item of headers">{{ item.title }}</th>
-        <th></th>
+        <th *ngIf="actions.length > 0">{{ actionsTitle }}</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngIf="!isLoading">
         <tr *ngFor="let item of data">
           <ng-container *ngFor="let head of headers">
-            <th>{{ validate(head, item) }}</th>
+            <th
+              style="
+                max-width: 200px;
+                text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                overflow: hidden;
+              "
+            >
+              {{ validate(head, item) }}
+            </th>
           </ng-container>
-          <th>
+          <th *ngIf="actions.length > 0">
             <div class="d-flex">
               <a
                 placement="top"
                 [ngbTooltip]="action.tooltip"
                 class="m-1"
+                triggers="hover"
                 [class]="action.color ? action.color : 'default'"
                 (click)="
-                  onActionClick.emit({ action: action.key, id: item.id })
+                  onActionClick.emit({ action: action.key, id: item.id });
+                  $event.target.blur();
+                  $event.target.parentNode.blur()
                 "
                 *ngFor="let action of actions"
                 href="javascript:void(0)"
@@ -44,7 +56,7 @@
               ></ngx-skeleton-loader>
             </th>
           </ng-container>
-          <th>
+          <th *ngIf="actions.length > 0">
             <ngx-skeleton-loader
               [theme]="{
                 height: '25px',
@@ -56,4 +68,7 @@
       ></ng-container>
     </tbody>
   </table>
+  <div *ngIf="data.length <= 0 && !isLoading" class="p-2 pl-3">
+    <small> <b>No se encontrarón datos</b> </small>
+  </div>
 </div>
